@@ -18,6 +18,7 @@ use App\Http\Controllers\TokoController;
 use App\Http\Controllers\VendorOrderController;
 use App\Http\Controllers\TokoKunjunganController;
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\NfcAbsensiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -326,6 +327,30 @@ Route::get('/papan-antrian', [AntrianController::class, 'papan'])->name('papan-a
 
 // SSE Stream Endpoint (Public - untuk semua yang butuh real-time update)
 Route::get('/sse/antrian', [AntrianController::class, 'stream'])->name('sse.antrian');
+
+/*
+|--------------------------------------------------------------------------
+| NFC Absensi Routes (Web NFC API Module)
+|--------------------------------------------------------------------------
+*/
+
+// NFC Routes
+Route::prefix('nfc')->name('nfc.')->group(function () {
+
+    // Scanner & scan endpoint - user (operator/dosen) only
+    Route::middleware(['auth', 'user'])->group(function () {
+        Route::get('/scanner', [NfcAbsensiController::class, 'scanner'])->name('scanner');
+        Route::post('/scan', [NfcAbsensiController::class, 'scan'])->name('scan');
+    });
+
+    // Manajemen kartu & riwayat - admin only
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/kartu', [NfcAbsensiController::class, 'kartu'])->name('kartu');
+        Route::post('/kartu', [NfcAbsensiController::class, 'simpanKartu'])->name('kartu.simpan');
+        Route::delete('/kartu/{kartu}', [NfcAbsensiController::class, 'hapusKartu'])->name('kartu.hapus');
+        Route::get('/riwayat', [NfcAbsensiController::class, 'riwayat'])->name('riwayat');
+    });
+});
 
 // Admin Routes - Kelola Antrian (Requires Auth)
 Route::middleware(['auth'])->prefix('antrian')->name('antrian.')->group(function () {

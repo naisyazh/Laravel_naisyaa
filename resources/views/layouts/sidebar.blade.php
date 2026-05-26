@@ -65,17 +65,14 @@
         }
     }
 
-    #sidebar::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    #sidebar::-webkit-scrollbar-thumb {
-        background: #e0e0e0;
-        border-radius: 10px;
-    }
+    #sidebar::-webkit-scrollbar { width: 4px; }
+    #sidebar::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
 </style>
+
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
+
+        {{-- Profile --}}
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-image">
@@ -89,16 +86,28 @@
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
             </a>
         </li>
+
+        {{-- Dashboard --}}
         <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('otp.dashboard') }}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon text-primary"></i>
             </a>
         </li>
+
+        {{-- Koleksi Buku (semua role) --}}
+        <li class="nav-item {{ Request::is('buku*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('buku.index') }}">
+                <span class="menu-title">Koleksi Buku</span>
+                <i class="mdi mdi-book-open-variant menu-icon text-info"></i>
+            </a>
+        </li>
+
+        {{-- ==================== ADMIN ==================== --}}
         @if (Auth::check() && Auth::user()->role == 'admin')
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     ADMIN PANEL
                 </div>
             </li>
@@ -114,9 +123,9 @@
                     <i class="mdi mdi-format-list-bulleted menu-icon text-success"></i>
                 </a>
             </li>
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     MODUL CUSTOMER
                 </div>
             </li>
@@ -138,14 +147,7 @@
                     <i class="mdi mdi-file-image menu-icon text-warning"></i>
                 </a>
             </li>
-        @endif
-        <li class="nav-item {{ Request::is('buku*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('buku.index') }}">
-                <span class="menu-title">Koleksi Buku</span>
-                <i class="mdi mdi-book-open-variant menu-icon text-info"></i>
-            </a>
-        </li>
-        @if (Auth::check() && Auth::user()->role == 'admin')
+
             <li class="nav-item {{ (Request::is('barang') || Request::is('barang/*')) && !Request::is('barang/scanner') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('barang.index') }}">
                     <span class="menu-title">Master Buku Toko</span>
@@ -170,9 +172,9 @@
                     <i class="mdi mdi-qrcode menu-icon text-success"></i>
                 </a>
             </li>
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     MODUL GEOLOCATION
                 </div>
             </li>
@@ -182,9 +184,27 @@
                     <i class="mdi mdi-store menu-icon text-primary"></i>
                 </a>
             </li>
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                    MODUL NFC ABSENSI
+                </div>
+            </li>
+            <li class="nav-item {{ Request::is('nfc/kartu') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('nfc.kartu') }}">
+                    <span class="menu-title">Manajemen Kartu NFC</span>
+                    <i class="mdi mdi-card-account-details menu-icon text-info"></i>
+                </a>
+            </li>
+            <li class="nav-item {{ Request::is('nfc/riwayat') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('nfc.riwayat') }}">
+                    <span class="menu-title">Riwayat Absensi NFC</span>
+                    <i class="mdi mdi-history menu-icon text-warning"></i>
+                </a>
+            </li>
+
+            <li class="nav-item sidebar-section-label">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     MODUL SSE ANTRIAN
                 </div>
             </li>
@@ -206,11 +226,14 @@
                     <i class="mdi mdi-monitor-dashboard menu-icon text-success"></i>
                 </a>
             </li>
+
         @endif
+
+        {{-- ==================== USER ==================== --}}
         @if (Auth::check() && Auth::user()->role == 'user')
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     FITUR USER
                 </div>
             </li>
@@ -232,9 +255,9 @@
                     <i class="mdi mdi-code-tags menu-icon text-primary"></i>
                 </a>
             </li>
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     MODUL GEOLOCATION
                 </div>
             </li>
@@ -250,9 +273,21 @@
                     <i class="mdi mdi-history menu-icon text-info"></i>
                 </a>
             </li>
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                    MODUL NFC ABSENSI
+                </div>
+            </li>
+            <li class="nav-item {{ Request::is('nfc/scanner') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('nfc.scanner') }}">
+                    <span class="menu-title">Scanner Absensi NFC</span>
+                    <i class="mdi mdi-nfc-variant menu-icon text-primary"></i>
+                </a>
+            </li>
+
+            <li class="nav-item sidebar-section-label">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     MODUL SSE ANTRIAN
                 </div>
             </li>
@@ -274,9 +309,9 @@
                     <i class="mdi mdi-monitor-dashboard menu-icon text-success"></i>
                 </a>
             </li>
+
             <li class="nav-item sidebar-section-label">
-                <div class="sidebar-heading"
-                    style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
+                <div class="sidebar-heading" style="padding: 15px 15px 5px 25px; font-size: 11px; font-weight: bold; color: #afafaf;">
                     DOKUMEN EKSKLUSIF
                 </div>
             </li>
@@ -292,8 +327,10 @@
                     <i class="mdi mdi-email-seal menu-icon text-warning"></i>
                 </a>
             </li>
+
         @endif
 
+        {{-- Logout --}}
         <li class="nav-item mt-3">
             <a class="nav-link" href="#"
                 onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();"
@@ -302,6 +339,7 @@
                 <i class="mdi mdi-power menu-icon text-danger"></i>
             </a>
         </li>
+
     </ul>
 </nav>
 
